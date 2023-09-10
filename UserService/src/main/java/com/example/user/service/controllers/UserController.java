@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.user.service.entities.Rating;
 import com.example.user.service.entities.User;
+import com.example.user.service.external.services.RatingService;
 import com.example.user.service.services.UserService;
 
 @RestController
@@ -46,4 +48,22 @@ public class UserController {
 		List<User> allUser = userService.getAllUser();
 		return ResponseEntity.ok(allUser);
 	}
+	
+	
+	
+	private final RatingService ratingService;
+
+    @Autowired
+    public UserController(RatingService ratingService) {
+        this.ratingService = ratingService;
+    }
+    
+ // POST endpoint to create a rating
+    @PostMapping("/ratings")
+    public Rating createRating(@RequestBody Rating rating) {
+        // Call the Feign client method to create a rating
+        return ratingService.createRating(rating);
+    }
+    
+    
 }

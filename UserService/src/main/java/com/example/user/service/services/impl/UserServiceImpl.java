@@ -15,6 +15,7 @@ import com.example.user.service.entities.Hotel;
 import com.example.user.service.entities.Rating;
 import com.example.user.service.entities.User;
 import com.example.user.service.exceptions.ResourceNotFoundException;
+import com.example.user.service.external.services.HotelService;
 import com.example.user.service.repositories.UserRepository;
 import com.example.user.service.services.UserService;
 
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private HotelService hotelService;
 	
 	
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
@@ -61,9 +65,12 @@ public class UserServiceImpl implements UserService{
 			//api call to hotel service to get the hotel
 			//http://localhost:8082/hotels/hotelId
 			
-			ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hotels/"+rating.getHotelId(), Hotel.class);
-			Hotel hotel = forEntity.getBody();
-			logger.info("response status cpde: {}",forEntity.getStatusCode());
+			//ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hotels/"+rating.getHotelId(), Hotel.class);
+			//Hotel hotel = forEntity.getBody();
+			//logger.info("response status cpde: {}",forEntity.getStatusCode());
+			
+			Hotel hotel = hotelService.getHotel(rating.getHotelId());
+			
 			
 			//set the hotel to rating
 			rating.setHotel(hotel);
